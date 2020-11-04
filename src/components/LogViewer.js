@@ -4,7 +4,7 @@ import { LazyLog } from 'react-lazylog';
 const LogViewer = ({logList}) => {
     const getText = () => {
         var allText = "Upload a zip file to begin"
-        if (logList.length != 0)
+        if (logList.length !== 0)
             allText = ""
         logList.map((logItem) => {
             allText += logItem.content

@@ -10,7 +10,7 @@ import {
   NavbarDivider
 } from "@blueprintjs/core";
 import FileDropzone from '../components/Dropzone'
-import LogViewer from '../components/LogViewer';
+import LoadableLogViewer from '../components/LoadableLogViewer';
 
 export default function Index() {
   const [ logList, setLogList] = useState([])
@@ -32,7 +32,7 @@ export default function Index() {
         </Navbar.Group>
       </Navbar>
       <Card className="full-height">
-        <LogViewer logList={logList}></LogViewer>
+        <LoadableLogViewer logList={logList}></LoadableLogViewer>
       </Card>
     </div>
   );
