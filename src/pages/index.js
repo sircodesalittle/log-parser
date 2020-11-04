@@ -28,10 +28,10 @@ export default function Index() {
           <FileDropzone setZipList={setLogList}></FileDropzone>
         </NavbarGroup>
         <Navbar.Group align={Alignment.RIGHT}>
-          <Button icon="refresh" className="bp3-minimal" intent="danger" text="Reset" onClick={resetApp}/>
+          <Button icon="refresh" className="bp3-minimal" intent="danger" text="Clear" onClick={resetApp}/>
         </Navbar.Group>
       </Navbar>
-      <Card className="full-height">
+      <Card className="full-height" style={{marginBottom: 10}}>
         <LoadableLogViewer logList={logList}></LoadableLogViewer>
       </Card>
     </div>
