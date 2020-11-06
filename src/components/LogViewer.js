@@ -58,21 +58,19 @@ const LogViewer = ({logList, setLogList}) => {
     }
 
     const [ zipNode, setZipNode ] = useState({nodes: []})
+    const [logText, setLogText] = useState("Upload a zip file to begin")
 
     const handleHideShowClick = useCallback((logItem) => {
-        console.log(logItem)
         var fileIndex = hiddenLogNames.indexOf(logItem.file)
         if ( fileIndex === -1) {
             setHiddenLogNames([...hiddenLogNames, logItem.file])
         } else {
             var hiddenList = hiddenLogNames.filter((logName) => logName !== logItem.file)
-            console.log(hiddenList)
             if (hiddenList.length === logList.length)
                 setLogText('All files are hidden')
             setHiddenLogNames(hiddenList)
         }
-        console.log(hiddenLogNames)
-    }, [hiddenLogNames, logText])
+    }, [hiddenLogNames, logList.length])
 
     const hideAllFiles = () => {
         var hidden = []
@@ -163,10 +161,7 @@ const LogViewer = ({logList, setLogList}) => {
             }
         })
         setZipNode({nodes: sideBarNodes})
-    }, [logList, hiddenLogNames])
-
-
-    const [logText, setLogText] = useState("Upload a zip file to begin")
+    }, [logList, hiddenLogNames, handleHideShowClick])
 
     useEffect(() => {
         var allText = logText
@@ -178,7 +173,7 @@ const LogViewer = ({logList, setLogList}) => {
         })
 
         setLogText(allText)
-    }, [hiddenLogNames, logList])
+    }, [hiddenLogNames, logList, logText])
 
     const handleClear = () => {
         setQuickSearchTags([])
