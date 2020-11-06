@@ -1,19 +1,16 @@
 {
-  "name": "gatsby",
-  "version": "4.0.0",
+  "name": "log-parser",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@blueprintjs/core": "^3.35.0",
     "@loadable/component": "^5.14.1",
-    "@material-ui/styles": "latest",
     "gatsby": "latest",
     "gatsby-plugin-react-helmet": "latest",
     "jszip": "^3.5.0",
-    "material-ui-dropzone": "^3.5.0",
     "normalize": "^0.3.1",
     "react": "latest",
     "react-dom": "latest",
-    "react-dropzone": "^11.2.3",
     "react-helmet": "latest",
     "react-lazylog": "^4.5.3"
   },

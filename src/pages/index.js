@@ -23,7 +23,7 @@ export default function Index() {
     <div className="bp3-dark full-height">
       <Navbar className={Classes.DARK}>
         <NavbarGroup align={Alignment.LEFT}>
-          <NavbarHeading>Gen5 Log Parser</NavbarHeading>
+          <NavbarHeading>Log Parser</NavbarHeading>
           <NavbarDivider />
           <FileDropzone setZipList={setLogList}></FileDropzone>
         </NavbarGroup>
