@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { LazyLog } from 'react-lazylog';
 import {
     Button,
@@ -18,7 +18,7 @@ const LogViewer = ({logList}) => {
         var allText = "Upload a zip file to begin"
         if (logList.length !== 0)
             allText = ""
-        logList.map((logItem) => {
+        logList.forEach((logItem) => {
             allText += logItem.content
         })
         
