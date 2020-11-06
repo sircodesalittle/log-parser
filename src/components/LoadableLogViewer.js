@@ -3,10 +3,10 @@ import loadable from '@loadable/component'
 
 const LogViewer = loadable(() => import('./LogViewer'))
 
-const LoadableLogViewer = ({logList}) => {
+const LoadableLogViewer = ({logList, setLogList}) => {
   return (
     <div className="full-height">
-      <LogViewer logList={logList}></LogViewer>
+      <LogViewer logList={logList} setLogList={setLogList}></LogViewer>
     </div>
   )
 }

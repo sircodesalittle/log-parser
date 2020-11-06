@@ -12,10 +12,12 @@ const FileDropzone = ({setZipList}) => {
     zip.forEach(async (relativePath, file) => {
       const promise = file.async('string')
       promises.push(promise)
-      zipContent.push({
-        file: relativePath,
-        content: await promise
-      })
+      if (!relativePath.endsWith('pcap')) {
+        zipContent.push({
+          file: relativePath,
+          content: await promise
+        })
+      }
     })
   
     await Promise.all(promises)
@@ -30,7 +32,6 @@ const FileDropzone = ({setZipList}) => {
       const binaryStr = reader.result
       var zipContent = await getZipFilesContent(binaryStr)
       setZipList(zipContent)
-      console.log(zipContent)
     }
     reader.readAsArrayBuffer(file)
   }

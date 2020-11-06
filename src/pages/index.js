@@ -31,8 +31,8 @@ export default function Index() {
           <Button icon="refresh" className="bp3-minimal" intent="danger" text="Clear" onClick={resetApp}/>
         </Navbar.Group>
       </Navbar>
-      <Card className="full-height" style={{marginBottom: 10}}>
-        <LoadableLogViewer logList={logList}></LoadableLogViewer>
+      <Card className="full-height" style={{paddingBottom: 100}}>
+        <LoadableLogViewer logList={logList} setLogList={setLogList}></LoadableLogViewer>
       </Card>
     </div>
   );
