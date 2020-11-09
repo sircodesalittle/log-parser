@@ -17,6 +17,13 @@ const LogViewer = ({logList, setLogList}) => {
         return []
     })
 
+    const [ hiddenFileExt, sethiddenFileExt] = useState(() => {
+        const hiddenFiles = localStorage.getItem('hiddenFileExt')
+        if (hiddenFiles)
+            return JSON.parse(hiddenFiles)
+        return ['pcap']
+    })
+
     const [ hiddenLogNames, setHiddenLogNames ] = useState([])
 
     const setNodeData = (nodeData) => {
@@ -91,89 +98,93 @@ const LogViewer = ({logList, setLogList}) => {
         var folderNodes = []
 
         logList.forEach((logItem, index) => {
-            var pathSplit = logItem.file.split('/')
-            var hasFolder = false
-            var label = ''
-            var opts = {}
-            if (hiddenLogNames.indexOf(logItem.file) === -1)
-                opts['icon'] = 'eye-open'
-            else
-                opts['icon'] = 'eye-off'
-            if (pathSplit.length > 1) {
-                if (folders.indexOf(pathSplit[0]) === -1) {
-                    // No folder, so make one
-                    var folderNodesLength = sideBarNodes.push(
-                        {
-                            id: index * 10,
-                            hasCaret: true,
-                            label: pathSplit[0],
-                            icon: "folder-open",
-                            isExpanded: true,
-                            childNodes: [
-                                {
-                                    id: index,
-                                    label: pathSplit[1],
-                                    icon: 'document',
-                                    secondaryLabel: (
-                                        <Icon {...opts} onClick={() => { 
-                                            handleHideShowClick(logItem)
-                                        }} />
-                                    ),
-                                }
-                            ]
-                        }
-                    )
-                    folders.push(pathSplit[0])
-                    folderNodes.push(sideBarNodes[folderNodesLength - 1])
+            var extension = logItem.file.split('.')[1]
+            if (hiddenFileExt.indexOf(extension) === -1) {
+                var pathSplit = logItem.file.split('/')
+                var hasFolder = false
+                var label = ''
+                var opts = {}
+                if (hiddenLogNames.indexOf(logItem.file) === -1)
+                    opts['icon'] = 'eye-open'
+                else
+                    opts['icon'] = 'eye-off'
+                if (pathSplit.length > 1) {
+                    if (folders.indexOf(pathSplit[0]) === -1) {
+                        // No folder, so make one
+                        var folderNodesLength = sideBarNodes.push(
+                            {
+                                id: index * 10,
+                                hasCaret: true,
+                                label: pathSplit[0],
+                                icon: "folder-open",
+                                isExpanded: true,
+                                childNodes: [
+                                    {
+                                        id: index,
+                                        label: pathSplit[1],
+                                        icon: 'document',
+                                        secondaryLabel: (
+                                            <Icon {...opts} onClick={() => { 
+                                                handleHideShowClick(logItem)
+                                            }} />
+                                        ),
+                                    }
+                                ]
+                            }
+                        )
+                        folders.push(pathSplit[0])
+                        folderNodes.push(sideBarNodes[folderNodesLength - 1])
 
+                    } else {
+                        // Already have a folder, so find it and add the node
+                        var folderNode = folderNodes[folders.indexOf(pathSplit[0])]
+                        folderNode.childNodes.push(
+                            {
+                                id: index,
+                                label: pathSplit[1],
+                                icon: 'document',
+                                secondaryLabel: (
+                                    <Icon {...opts} onClick={() => { 
+                                        handleHideShowClick(logItem)
+                                    }} />
+                                ),
+                            }
+                        )
+                    }
+                    
                 } else {
-                    // Already have a folder, so find it and add the node
-                    var folderNode = folderNodes[folders.indexOf(pathSplit[0])]
-                    folderNode.childNodes.push(
-                        {
-                            id: index,
-                            label: pathSplit[1],
-                            icon: 'document',
-                            secondaryLabel: (
-                                <Icon {...opts} onClick={() => { 
-                                    handleHideShowClick(logItem)
-                                }} />
-                            ),
-                        }
-                    )
+                    // Leaf node
+                    label = pathSplit[0]
+                    var sideNode = {
+                        id: index,
+                        hasCaret: hasFolder,
+                        label: label,
+                        icon: 'document',
+                        secondaryLabel: (
+                            <Icon {...opts} onClick={() => { 
+                                handleHideShowClick(logItem)
+                            }} />
+                        ),
+                    }
+                    sideBarNodes.push(sideNode)
                 }
-                
-            } else {
-                // Leaf node
-                label = pathSplit[0]
-                var sideNode = {
-                    id: index,
-                    hasCaret: hasFolder,
-                    label: label,
-                    icon: 'document',
-                    secondaryLabel: (
-                        <Icon {...opts} onClick={() => { 
-                            handleHideShowClick(logItem)
-                        }} />
-                    ),
-                }
-                sideBarNodes.push(sideNode)
             }
         })
         setZipNode({nodes: sideBarNodes})
-    }, [logList, hiddenLogNames, handleHideShowClick])
+    }, [logList, hiddenLogNames, handleHideShowClick, hiddenFileExt])
 
     useEffect(() => {
         var allText = logText
         if (logList.length !== 0)
             allText = ""
         logList.forEach((logItem) => {
-            if (!logItem.file.endsWith('.pcap') && hiddenLogNames.indexOf(logItem.file) === -1)
+            var extension = logItem.file.split('.')[1]
+            if (hiddenFileExt.indexOf(extension) === -1 && hiddenLogNames.indexOf(logItem.file) === -1)
                 allText += logItem.content
         })
 
         setLogText(allText)
-    }, [hiddenLogNames, logList, logText])
+    }, [hiddenLogNames, logList, logText, hiddenFileExt])
 
     const handleClear = () => {
         setQuickSearchTags([])
@@ -184,6 +195,27 @@ const LogViewer = ({logList, setLogList}) => {
         setQuickSearchTags(values)
         localStorage.setItem("savedTags", JSON.stringify(values));
     }
+
+    const handleClearExt = () => {
+        sethiddenFileExt([])
+        localStorage.setItem("hiddenFileExt", JSON.stringify([]));
+    }
+
+    const handleChangeExt = (values) => {
+        let newValues = values.map((item) => {
+            return item.replace('.', '').toLowerCase()
+        })
+        sethiddenFileExt(newValues)
+        localStorage.setItem("hiddenFileExt", JSON.stringify(values));
+    }
+
+    const extClearButton = (
+        <Button
+            icon={"cross"}
+            minimal={true}
+            onClick={handleClearExt}
+        />
+    );
 
     const clearButton = (
         <Button
@@ -215,10 +247,17 @@ const LogViewer = ({logList, setLogList}) => {
         <div className="full-height page-wrapper">
             <div className='row full-height'>
                 <div className='column full-height' style={{overflow: 'auto'}}>
-                <ButtonGroup>
-                    <Button icon="eye-open" onClick={showAllFiles}>Show All</Button>
-                    <Button icon="eye-off" onClick={hideAllFiles}>Hide all</Button>
-                </ButtonGroup>
+                    <ButtonGroup>
+                        <Button icon="eye-open" onClick={showAllFiles}>Show All</Button>
+                        <Button icon="eye-off" onClick={hideAllFiles}>Hide all</Button>
+                    </ButtonGroup>
+                    <p className={'bp3-text-small'} style={{marginTop: 15}}>File extensions to ignore</p>
+                    <TagInput
+                        onChange={handleChangeExt}
+                        placeholder="Add file extensions to ignore..."
+                        rightElement={extClearButton}
+                        values={hiddenFileExt}
+                    />
                     <Tree
                         contents={zipNode.nodes}
                         onNodeClick={handleNodeClick}
@@ -228,7 +267,7 @@ const LogViewer = ({logList, setLogList}) => {
                     </Tree>
                 </div>
 
-                <div className='double-column full-height'>
+                <div className='double-column full-height' style={{ marginLeft: 10 }}>
                     <div className="full-height" style={{marginBottom: 10 }}>
                         <p>Add tag and click it to quick filter</p>
                         <TagInput
