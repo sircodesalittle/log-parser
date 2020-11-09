@@ -21,7 +21,7 @@ export default function Index() {
 
   return (
     <div className="bp3-dark full-height">
-      <Navbar className={Classes.DARK}>
+      <Navbar className={Classes.DARK} style={{position:'fixed', top:0, bottom:0}}>
         <NavbarGroup align={Alignment.LEFT}>
           <NavbarHeading>Log Parser</NavbarHeading>
           <NavbarDivider />
@@ -31,7 +31,7 @@ export default function Index() {
           <Button icon="refresh" className="bp3-minimal" intent="danger" text="Clear" onClick={resetApp}/>
         </Navbar.Group>
       </Navbar>
-      <Card className="full-height" style={{paddingBottom: 100}}>
+      <Card className="full-height" style={{paddingBottom: 100, paddingTop: 50}}>
         <LoadableLogViewer logList={logList} setLogList={setLogList}></LoadableLogViewer>
       </Card>
     </div>
