@@ -9,7 +9,7 @@ import {
   NavbarHeading,
   NavbarDivider
 } from "@blueprintjs/core";
-import FileDropzone from '../components/Dropzone'
+import LoadableDropzone from '../components/LoadableDropzone'
 import LoadableLogViewer from '../components/LoadableLogViewer';
 
 export default function Index() {
@@ -25,7 +25,7 @@ export default function Index() {
         <NavbarGroup align={Alignment.LEFT}>
           <NavbarHeading>Log Parser</NavbarHeading>
           <NavbarDivider />
-          <FileDropzone setZipList={setLogList}></FileDropzone>
+          <LoadableDropzone setZipList={setLogList}></LoadableDropzone>
         </NavbarGroup>
         <Navbar.Group align={Alignment.RIGHT}>
           <Button icon="refresh" className="bp3-minimal" intent="danger" text="Clear" onClick={resetApp}/>

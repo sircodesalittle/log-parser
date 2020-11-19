@@ -6,7 +6,7 @@ import untar from "js-untar";
 const pako = require('pako');
 var JSZip = require("jszip");
 
-const FileDropzone = ({setZipList}) => {
+const Dropzone = ({setZipList}) => {
 
   async function getZipFilesContent (data) {
     const zipContent = []
@@ -80,4 +80,4 @@ const FileDropzone = ({setZipList}) => {
   )
 }
 
-export default FileDropzone
+export default Dropzone
